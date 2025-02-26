@@ -12,7 +12,7 @@ if SplashIndex == 7 then SplashText = 'Are u winning, son?' end --credits to Ske
 
 Plr = {}
 
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({IntroText = tostring(SplashText),Name = "PLANG HUB", HidePremium = false, SaveConfig = true, ConfigFolder = "PLANGHUB"})
 
 local Tab = Window:MakeTab({
@@ -244,28 +244,40 @@ end
 Tab:AddButton({
 	Name = "Become WeaponMaster Boss",
 	Callback = function()
-        for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        _G.ClearitemCheck = false
+        game.Players.LocalPlayer.Character.Humanoid.HealthChanged:Connect(function()
+            if script.Parent.Health <= 0 then
+                if _G.ClearitemCheck then return end
+                _G.ClearitemCheck = true
+                for i,v in pairs(game.Workspace:GetChildren()) do
+                    if v:IsA("Tool") then
+                        v:Destroy()
+                    end
+                end
+            end
+        end)
+        --[[for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
             if v:IsA("Tool") then
                 v:Destroy()
             end
-        end
-        wait(1)
+        end--]]
+        task.wait(1)
         for i = 1,60 do
             game.ReplicatedStorage.SpawnGalaxyBlock:FireServer()
         end
-        wait(3)
+        task.wait(3)
         for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren())  do
             if v:IsA("Tool") then
                 v.Parent = game.Players.LocalPlayer.Character
             end
         end
-        wait(1)
+        task.wait(1)
         for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
         	if v:IsA("Tool") then
         		v.Parent = workspace
         	end
         end
-        wait(1)
+        task.wait(1)
         for i = 1,20 do
             game.ReplicatedStorage.SpawnRainbowBlock:FireServer()
         end
@@ -280,7 +292,7 @@ Tab:AddButton({
                 v:Destroy()
             end
         end
-  	end    
+  	end   
 })
 
 Tab:AddParagraph("How To Use","To using WeaponMaster Boss make sure you don't have any items in your backpack and when you died use clear WeaponDrop")
